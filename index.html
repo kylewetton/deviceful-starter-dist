@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deviceful Starter – non-npm</title>
+  </head>
+
+  <style>
+    /** An example of how to handle responsiveness **/
+    .laptop {
+      height: 250px;
+    }
+
+    @media (min-width: 768px) {
+      .laptop {
+        height: 450px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .laptop {
+        height: 600px;
+      }
+    }
+
+    /** Demo specific **/
+
+    body,
+    html {
+      margin: 0;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      margin: 10px;
+    }
+  </style>
+  <body>
+    <div class="laptop"></div>
+
+    <div class="buttons">
+      <button onclick="device.swivel()">Swivel</button>
+      <button onclick="device.swivel({to: 0})">Center</button>
+      <button onclick="device.scroll()">Scroll Down</button>
+      <button onclick="device.scroll({direction: 'up'})">Scroll Up</button>
+    </div>
+
+    <script src="deviceful.min.js"></script>
+    <script>
+      var device = new Deviceful({
+        parent: ".laptop",
+        screenshot: "redgarden.jpg",
+        screenshotHeight: 2402,
+      });
+
+      device.mount();
+    </script>
+  </body>
+</html>
