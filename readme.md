@@ -1,4 +1,4 @@
-# Deviceful.js Starter – npm Edition
+# Deviceful.js Starter – Static Edition
 
 Command devices for your designs.
 
