@@ -8,18 +8,21 @@
 
   <style>
     /** An example of how to handle responsiveness **/
-    .laptop {
+    .laptop,
+    .phone {
       height: 250px;
     }
 
     @media (min-width: 768px) {
-      .laptop {
+      .laptop,
+      .phone {
         height: 450px;
       }
     }
 
     @media (min-width: 1024px) {
-      .laptop {
+      .laptop,
+      .phone {
         height: 600px;
       }
     }
@@ -31,34 +34,134 @@
       margin: 0;
     }
 
+    .phone {
+      background: #222222;
+      cursor: pointer;
+    }
+
     .buttons {
       display: flex;
       justify-content: center;
+      margin-bottom: 2rem;
     }
 
     button {
       margin: 10px;
+      cursor: pointer;
     }
   </style>
   <body>
+    <div class="phone"></div>
     <div class="laptop"></div>
 
     <div class="buttons">
-      <button onclick="device.swivel()">Swivel</button>
-      <button onclick="device.swivel({to: 0})">Center</button>
-      <button onclick="device.scroll()">Scroll Down</button>
-      <button onclick="device.scroll({direction: 'up'})">Scroll Up</button>
+      <button onclick="laptop.close()">Close</button>
+      <button onclick="laptop.open()">Open</button>
+      <button onclick="laptop.swivel()">Swivel</button>
+      <button onclick="laptop.swivel({to: 0})">Center</button>
+      <button onclick="laptop.scroll()">Scroll Down</button>
+      <button onclick="laptop.scroll({direction: 'up'})">Scroll Up</button>
     </div>
 
     <script src="deviceful.min.js"></script>
     <script>
-      var device = new Deviceful({
+      // Check out deviceful.app for full documentation
+
+      /**
+       * Laptop Example
+       */
+
+      var laptop = new Deviceful({
         parent: ".laptop",
+        device: "laptop",
         screenshot: "redgarden.jpg",
         screenshotHeight: 2402,
       });
 
-      device.mount();
+      /**
+       * Phone Example
+       */
+
+      var phoneLoadAnim = [
+        {
+          object: "camera",
+          move: "position",
+          axis: "y",
+          duration: 1500,
+          to: -1,
+        },
+        {
+          object: "model",
+          move: "rotation",
+          axis: "y",
+          to: 45,
+          duration: 4000,
+          delay: 1000,
+        },
+      ];
+
+      var phone = new Deviceful({
+        parent: ".phone",
+        device: "phone",
+        screenshot: "redgarden_mobile.jpg",
+        screenshotHeight: 2792,
+        cameraDistance: 15,
+        cameraHeight: 1,
+        onLoadAnimation: phoneLoadAnim,
+      });
+
+      // Phones hover animation
+
+      var phoneParent = document.querySelector(".phone");
+      var phoneFocusState = false;
+
+      phoneParent.addEventListener("click", function () {
+        if (!phoneFocusState) {
+          phone.swivel({ to: 0, duration: 1000 });
+          phone.scroll({ duration: 3000 });
+          phone.animate([
+            {
+              object: "camera",
+              move: "position",
+              axis: "z",
+              to: 30,
+              duration: 1000,
+            },
+            {
+              object: "camera",
+              move: "position",
+              axis: "y",
+              to: -2,
+              duration: 1000,
+            },
+          ]);
+          phoneFocusState = true;
+        } else {
+          phone.swivel({ to: 45, duration: 1000, easing: "easeOutQuad" });
+          phone.scroll({ direction: "up", duration: 3000 });
+          phone.animate([
+            {
+              object: "camera",
+              move: "position",
+              axis: "z",
+              to: 15,
+              duration: 1000,
+            },
+            {
+              object: "camera",
+              move: "position",
+              axis: "y",
+              to: -1,
+              duration: 1000,
+            },
+          ]);
+          phoneFocusState = false;
+        }
+      });
+
+      // Mount your Deviceful instances to start them
+      phone.mount();
+      laptop.mount();
     </script>
   </body>
 </html>
